@@ -1,7 +1,8 @@
 import flask
 from ..models import Todo,User
-import app
+from . import main
 
+@main.route("/")
 def index():
     # As a list to test debug toolbar
     Todo.objects().delete()  # Removes
@@ -12,6 +13,7 @@ def index():
     todos = Todo.objects.all()
     return flask.render_template('index.html', todos=todos)
 
+@main.route("/user")
 def user():
     # As a list to test debug toolbar
     User.objects().delete()  # Removes
@@ -20,6 +22,8 @@ def user():
     users = User.objects.all()
     return flask.render_template('user.html', users=users)
 
+
+@main.route("/pagination")
 def pagination():
     Todo.objects().delete()
     for i in range(10):

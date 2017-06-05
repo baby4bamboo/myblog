@@ -11,10 +11,5 @@ manager = Manager(app)
 from app.models import db
 db.init_app(app)
 
-from app.main.views import index,pagination,user
-app.add_url_rule('/', view_func=index)
-app.add_url_rule('/user', view_func=user)
-app.add_url_rule('/pagination', view_func=pagination)
-
 if __name__ == '__main__':
     manager.run()
