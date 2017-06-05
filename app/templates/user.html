@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% for user in users %}
+    <div>
+      <h2>{{ user.username }}</h2>
+      {{ user.password|safe }}
+    </div>
+  {% else %}
+    <em>Unbelievable.  No todos here so far <a href="/add">Add one</a></em>
+  {% endfor %}
+{% endblock %}
