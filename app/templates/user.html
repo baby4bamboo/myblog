@@ -4,6 +4,7 @@
     <div>
       <h2>{{ user.username }}</h2>
       {{ user.password|safe }}
+      {{ user.email|safe }}
     </div>
   {% else %}
     <em>Unbelievable.  No todos here so far <a href="/add">Add one</a></em>

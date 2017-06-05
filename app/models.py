@@ -1,5 +1,7 @@
 import datetime
 from flask_mongoengine import MongoEngine
+from flask.ext.login import UserMixin
+from . import login_manager
 
 db = MongoEngine()
 
@@ -9,7 +11,11 @@ class Todo(db.Document):
     done = db.BooleanField(default=False)
     pub_date = db.DateTimeField(default=datetime.datetime.now)
 
-class User(db.Document):
-    username = db.StringField(max_length=60)
-    password = db.StringField(max_length=60)
-    gender = db.StringField(default="Male")
+class User(UserMixin,db.Document):
+    username = db.StringField(max_length=25, required=True, unique=True)
+    password = db.StringField()
+    email = db.StringField(required=True, unique=True)
+
+@login_manager.user_loader
+def user_load(user_id):
+    return User.objects(id=user_id).first()
