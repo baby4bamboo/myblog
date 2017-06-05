@@ -4,7 +4,9 @@ from .forms import LoginForm
 from flask import render_template, redirect, flash, request, url_for, session
 from flask.ext.login import login_required, current_user, logout_user, login_fresh, login_user
 from mongoengine import NotUniqueError
+from flask.ext.login import login_required
 
+@login_required
 @main.route("/", methods=["GET", "POST"])
 def index():
     # As a list to test debug toolbar
@@ -48,5 +50,13 @@ def login():
             return redirect(url_for("main.index"))
         flash(u"用户名或密码错误", 'danger')
     return render_template('login.html',form=form)
+
+@main.route("/logout")
+@login_required
+def logout():
+    session["username"] = None
+    logout_user()
+    flash(u"您已经退出登录", 'success')
+    return redirect(url_for("main.login"))
 
 
