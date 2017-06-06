@@ -1,6 +1,6 @@
 from ..models import Todo,User
 from . import main
-from .forms import LoginForm
+from .forms import LoginForm,RegisterForm
 from flask import render_template, redirect, flash, request, url_for, session
 from flask.ext.login import login_required, current_user, logout_user, login_fresh, login_user
 from mongoengine import NotUniqueError
@@ -59,4 +59,13 @@ def logout():
     flash(u"您已经退出登录", 'success')
     return redirect(url_for("main.login"))
 
-
+@main.route("/register" , methods=["GET", "POST"])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User.objects(username=form.username.data).first()
+        if user is None:
+            User(username=form.username.data, password=form.password.data, email=form.email.data).save()
+            return redirect(url_for("main.login"))
+        flash(u"用户名或密码错误", 'danger')
+    return render_template('register.html',form=form)
