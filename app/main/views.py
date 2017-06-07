@@ -1,13 +1,14 @@
 from ..models import Todo,User
 from . import main
-from .forms import LoginForm,RegisterForm
+from .forms import LoginForm,RegistrationForm
 from flask import render_template, redirect, flash, request, url_for, session
 from flask.ext.login import login_required, current_user, logout_user, login_fresh, login_user
 from mongoengine import NotUniqueError
 from flask.ext.login import login_required
 
-@login_required
+
 @main.route("/", methods=["GET", "POST"])
+@login_required
 def index():
     # As a list to test debug toolbar
     Todo.objects().delete()  # Removes
@@ -18,7 +19,9 @@ def index():
     todos = Todo.objects.all()
     return render_template('index.html', todos=todos)
 
+
 @main.route("/user")
+@login_required
 def user():
     # As a list to test debug toolbar
     User.objects().delete()  # Removes
@@ -29,6 +32,7 @@ def user():
 
 
 @main.route("/pagination")
+@login_required
 def pagination():
     Todo.objects().delete()
     for i in range(10):
@@ -61,7 +65,7 @@ def logout():
 
 @main.route("/register" , methods=["GET", "POST"])
 def register():
-    form = RegisterForm()
+    form = RegistrationForm()
     if form.validate_on_submit():
         user = User.objects(username=form.username.data).first()
         if user is None:
