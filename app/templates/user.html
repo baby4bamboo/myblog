@@ -1,13 +1,15 @@
 {% extends "layout.html" %}
 {% block body %}
+    <h2>数据库已经初始化！</h2>
   {% for user in users %}
     <div>
-      <h2>数据库已经初始化！</h2>
       {{ user.username }}
       {{ user.password|safe }}
       {{ user.email|safe }}
     </div>
+
   {% else %}
     <em>Unbelievable.  No todos here so far <a href="/add">Add one</a></em>
   {% endfor %}
+  <a href = "{{ url_for('main.login') }}">I want login</a>
 {% endblock %}

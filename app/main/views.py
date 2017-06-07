@@ -21,12 +21,11 @@ def index():
 
 
 @main.route("/user")
-@login_required
 def user():
     # As a list to test debug toolbar
     User.objects().delete()  # Removes
-    User(username="Svan Yao", password="123",email="bayao@cisco.com").save()  # Insert
-    User(username="Yun Jie", password="456",email="yunjie@gmail.com").save()  # Insert
+    User(username="Svan Yao", password="123", password_hash=User.generate_password_hash("123"), email="bayao@cisco.com").save()  # Insert
+    User(username="Yun Jie", password="456",  password_hash=User.generate_password_hash("456"), email="yunjie@gmail.com").save()  # Insert
     users = User.objects.all()
     return render_template('user.html', users=users)
 
@@ -48,7 +47,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.objects(username=form.username.data).first()
-        if user is not None:
+        if user is not None and user.verify_password(form.password.data):
             session["username"] = user.username
             login_user(user, form.remember)
             return redirect(url_for("main.index"))
@@ -69,7 +68,7 @@ def register():
     if form.validate_on_submit():
         user = User.objects(username=form.username.data).first()
         if user is None:
-            User(username=form.username.data, password=form.password.data, email=form.email.data).save()
+            User(username=form.username.data, password=form.password.data,password_hash=User.generate_password_hash(form.password.data),email=form.email.data).save()
             return redirect(url_for("main.login"))
-        flash(u"用户名或密码错误", 'danger')
+        flash(u"该用户已经注册过了，请直接登陆", 'danger')
     return render_template('register.html',form=form)
