@@ -24,8 +24,8 @@ def index():
 def user():
     # As a list to test debug toolbar
     User.objects().delete()  # Removes
-    User(username="Svan Yao", password="123", password_hash=User.generate_password_hash("123"), email="bayao@cisco.com").save()  # Insert
-    User(username="Yun Jie", password="456",  password_hash=User.generate_password_hash("456"), email="yunjie@gmail.com").save()  # Insert
+    User(email="bayao@cisco.com", password="123", password_hash=User.generate_password_hash("123"), username="Svan Yao").save()  # Insert
+    User(email="yunjie@gmail.com", password="456",  password_hash=User.generate_password_hash("456"),username="Yun Jie" ).save()  # Insert
     users = User.objects.all()
     return render_template('user.html', users=users)
 
@@ -46,9 +46,9 @@ def pagination():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.objects(username=form.username.data).first()
+        user = User.objects(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
-            session["username"] = user.username
+            session["email"] = user.email
             login_user(user, form.remember)
             return redirect(url_for("main.index"))
         flash(u"用户名或密码错误", 'danger')
@@ -57,7 +57,7 @@ def login():
 @main.route("/logout")
 @login_required
 def logout():
-    session["username"] = None
+    session["email"] = None
     logout_user()
     flash(u"您已经退出登录", 'success')
     return redirect(url_for("main.login"))
@@ -66,9 +66,9 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User.objects(username=form.username.data).first()
+        user = User.objects(email=form.email.data).first()
         if user is None:
-            User(username=form.username.data, password=form.password.data,password_hash=User.generate_password_hash(form.password.data),email=form.email.data).save()
+            User(email=form.email.data, password=form.password.data,password_hash=User.generate_password_hash(form.password.data),username=form.username.data).save()
             return redirect(url_for("main.login"))
         flash(u"该用户已经注册过了，请直接登陆", 'danger')
     return render_template('register.html',form=form)

@@ -13,10 +13,10 @@ class Todo(db.Document):
     pub_date = db.DateTimeField(default=datetime.datetime.now)
 
 class User(UserMixin,db.Document):
-    username = db.StringField(max_length=25, required=True, unique=True)
+    email = db.StringField(required=True, unique=True)
     password = db.StringField()
     password_hash = db.StringField(max_length=128,default='')
-    email = db.StringField(required=True, unique=True)
+    username = db.StringField(max_length=25, required=True, unique=True)
 
     def generate_password_hash(password):
         return generate_password_hash(password)

@@ -1,11 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
     <h2>数据库已经初始化！</h2>
+  <p>测试数据如下: </p>
   {% for user in users %}
     <div>
-      {{ user.username }}
-      {{ user.password|safe }}
+      <p>
       {{ user.email|safe }}
+      {{ user.password|safe }}
+      {{ user.username }}
+      </p>
     </div>
 
   {% else %}
