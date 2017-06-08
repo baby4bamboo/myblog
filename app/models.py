@@ -17,6 +17,7 @@ class User(UserMixin,db.Document):
     password = db.StringField()
     password_hash = db.StringField(max_length=128,default='')
     username = db.StringField(max_length=25, required=True, unique=True)
+    group = db.StringField(default='subscriber', choices=["administrator", "editor", "subscriber"])
 
     def generate_password_hash(password):
         return generate_password_hash(password)

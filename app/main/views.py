@@ -24,8 +24,8 @@ def index():
 def user():
     # As a list to test debug toolbar
     User.objects().delete()  # Removes
-    User(email="bayao@cisco.com", password="123", password_hash=User.generate_password_hash("123"), username="Svan Yao").save()  # Insert
-    User(email="yunjie@gmail.com", password="456",  password_hash=User.generate_password_hash("456"),username="Yun Jie" ).save()  # Insert
+    User(email="bayao@cisco.com", password="123", password_hash=User.generate_password_hash("123"), username="Svan Yao",group="subscriber").save()  # Insert
+    User(email="yunjie@gmail.com", password="456",  password_hash=User.generate_password_hash("456"),username="Yun Jie",group="subscriber").save()  # Insert
     users = User.objects.all()
     return render_template('user.html', users=users)
 
@@ -68,7 +68,7 @@ def register():
     if form.validate_on_submit():
         user = User.objects(email=form.email.data).first()
         if user is None:
-            User(email=form.email.data, password=form.password.data,password_hash=User.generate_password_hash(form.password.data),username=form.username.data).save()
+            User(email=form.email.data, password=form.password.data,password_hash=User.generate_password_hash(form.password.data),username=form.username.data,group=form.group.data).save()
             return redirect(url_for("main.login"))
         flash(u"该用户已经注册过了，请直接登陆", 'danger')
     return render_template('register.html',form=form)
