@@ -25,3 +25,10 @@ class RegistrationForm(Form):
     password2 = PasswordField(u"用户密码确认*", validators=[InputRequired()], description=u"请确认你的密码, 与上面输入的密码保持一致.")
     group = SelectField(u"用户组", choices=choices, default=["subscriber"],description=u"不同的用户组拥有不同的权限.<br>具体的权限分配表请<a href=\"#\">参考这里</a>.")
     submit = SubmitField(u"确认注册")
+
+class PostForm(Form):
+    content_id = HiddenField()
+    title = StringField(u"标题", validators=[InputRequired()])
+    content = TextAreaField()
+    tags = StringField(u"标签")
+    submit = SubmitField(u"保存")

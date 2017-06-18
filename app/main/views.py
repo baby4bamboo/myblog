@@ -1,6 +1,6 @@
-from ..models import Todo,User
+from ..models import Todo,User,Post
 from . import main
-from .forms import LoginForm,RegistrationForm
+from .forms import LoginForm,RegistrationForm,PostForm
 from flask import render_template, redirect, flash, request, url_for, session
 from flask.ext.login import login_required, current_user, logout_user, login_fresh, login_user
 from mongoengine import NotUniqueError
@@ -68,7 +68,20 @@ def register():
     if form.validate_on_submit():
         user = User.objects(email=form.email.data).first()
         if user is None:
-            User(email=form.email.data, password=form.password.data,password_hash=User.generate_password_hash(form.password.data),username=form.username.data,group=form.group.data).save()
+            User(email=form.email.data, password=form.password.data, password_hash=User.generate_password_hash(form.password.data), username=form.username.data,group=form.group.data).save()
             return redirect(url_for("main.login"))
         flash(u"该用户已经注册过了，请直接登陆", 'danger')
     return render_template('register.html',form=form)
+
+@main.route("/post" , methods=["GET", "POST"])
+@login_required
+def post():
+    form = PostForm()
+    if form.validate_on_submit():
+        title = Post.objects(title=form.title.data).first()
+        if title is None:
+            Post(title=form.title.data, content=form.content.data, tags=[form.tags.data], author=session["email"]).save()
+            return redirect(url_for("main.index"))
+    return render_template('post.html', form=form)
+
+
