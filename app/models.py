@@ -6,12 +6,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = MongoEngine()
 
-class Todo(db.Document):
-    title = db.StringField(max_length=60)
-    text = db.StringField()
-    done = db.BooleanField(default=False)
-    pub_date = db.DateTimeField(default=datetime.now)
-
 class User(UserMixin,db.DynamicDocument):
     email = db.StringField(required=True, unique=True)
     password = db.StringField()

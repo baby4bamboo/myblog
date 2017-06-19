@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-import os
 from app import create_app
-from app.models import User, Todo
 from flask.ext.script import Manager, Shell
 
 app = create_app('default')

@@ -1,6 +1,6 @@
-from ..models import Todo,User,Post
+from ..models import User,Post
 from . import main
-from .forms import LoginForm,RegistrationForm,PostForm
+from .forms import SigninForm,SignupForm,PostForm
 from flask import render_template, redirect, flash, request, url_for, session
 from flask.ext.login import login_required, current_user, logout_user, login_fresh, login_user
 from mongoengine import NotUniqueError
@@ -23,21 +23,9 @@ def initdb():
     return render_template('initdb.html', users=users)
 
 
-@main.route("/pagination")
-@login_required
-def pagination():
-    Todo.objects().delete()
-    for i in range(10):
-        Todo(title='Simple todo {}'.format(i), text="12345678910").save()  # Insert
-
-    page_num = int(request.args.get('page') or 1)
-    todos_page = Todo.objects.paginate(page=page_num, per_page=3)
-
-    return render_template('pagination.html', todos_page=todos_page)
-
 @main.route("/login" , methods=["GET", "POST"])
 def login():
-    form = LoginForm()
+    form = SigninForm()
     if form.validate_on_submit():
         user = User.objects(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
@@ -55,16 +43,16 @@ def logout():
     flash(u"您已经退出登录", 'success')
     return redirect(url_for("main.login"))
 
-@main.route("/register" , methods=["GET", "POST"])
-def register():
-    form = RegistrationForm()
+@main.route("/signup" , methods=["GET", "POST"])
+def signup():
+    form = SignupForm()
     if form.validate_on_submit():
         user = User.objects(email=form.email.data).first()
         if user is None:
             User(email=form.email.data, password=form.password.data, password_hash=User.generate_password_hash(form.password.data), username=form.username.data,group=form.group.data).save()
             return redirect(url_for("main.login"))
         flash(u"该用户已经注册过了，请直接登陆", 'danger')
-    return render_template('register.html',form=form)
+    return render_template('signup.html',form=form)
 
 @main.route("/post" , methods=["GET", "POST"])
 @login_required

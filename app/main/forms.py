@@ -5,14 +5,14 @@ from wtforms import StringField, SubmitField, PasswordField, TextAreaField, Sele
 from wtforms.validators import InputRequired, Required, Length, Email, Regexp, EqualTo
 
 
-class LoginForm(Form):
+class SigninForm(Form):
     email = StringField(u"Email")
     password = PasswordField(u"密码")
     remember = BooleanField()
     submit = SubmitField(u"登录")
 
 
-class RegistrationForm(Form):
+class SignupForm(Form):
     choices = [
         ("subscriber", u"关注者"),
         ("editor", u"编辑"),
