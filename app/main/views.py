@@ -6,19 +6,12 @@ from flask.ext.login import login_required, current_user, logout_user, login_fre
 from mongoengine import NotUniqueError
 from flask.ext.login import login_required
 
-
 @main.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    # As a list to test debug toolbar
-    Todo.objects().delete()  # Removes
-    Todo(title="Simple todo A", text="12345678910").save()  # Insert
-    Todo(title="Simple todo B", text="12345678910").save()  # Insert
-    Todo.objects(title__contains="B").update(set__text="Hello world")  # Update
-    todos = list(Todo.objects[:10])
-    todos = Todo.objects.all()
-    return render_template('index.html', todos=todos)
-
+    user = User.objects(email=session["email"]).first()
+    posts = Post.objects(author=user.id)
+    return render_template('index.html', user=user,posts=posts)
 
 @main.route("/initdb")
 def initdb():
@@ -77,10 +70,11 @@ def register():
 @login_required
 def post():
     form = PostForm()
+    user = User.objects(email=session["email"]).first()
     if form.validate_on_submit():
         title = Post.objects(title=form.title.data).first()
         if title is None:
-            Post(title=form.title.data, content=form.content.data, tags=[form.tags.data], author=session["email"]).save()
+            Post(title=form.title.data, content=form.content.data, tags=[form.tags.data], author=user.id).save()
             return redirect(url_for("main.index"))
     return render_template('post.html', form=form)
 

@@ -1,14 +1,21 @@
 {% extends "layout.html" %}
 {% block body %}
-  {% for todo in todos %}
     <div>
-      <h2>{{ todo.title }}</h2>
-      {{ todo.text|safe }}
+      <h2>hello {{ user.username }}</h2>
     </div>
-  {% else %}
-    <em>Unbelievable.  No todos here so far <a href="/add">Add one</a></em>
-  {% endfor %}
+
+{% for post in posts %}
+  标题：{{ post.title }}</br>
+  正文：{{ post.content }}</br>
+  标签：{{ post.tags }}</br>
+  </br>
+  </br>
+{% else %}
+  <em>Sorry ,can find a post</em>
+{% endfor %}
+
   <br/>
 <a href= "{{ url_for('main.logout') }}">logout</a>
 <a href= "{{ url_for('main.initdb') }}">logout and init database</a>
+<a href= "{{ url_for('main.post') }}">add post</a>
 {% endblock %}

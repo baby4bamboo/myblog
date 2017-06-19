@@ -38,14 +38,6 @@ class Comment(db.EmbeddedDocument):
     content = db.StringField()
     name = db.StringField(max_length=120)
 
-'''
-class Post(db.DynamicDocument):
-    time_stamp = db.DateTimeField(default=datetime.now, required=True)
-    title = db.StringField(max_length=255, required=True)
-    body = db.StringField()
-    author = db.StringField()
-'''
-
 @login_manager.user_loader
 def user_load(user_id):
     return User.objects(id=user_id).first()
