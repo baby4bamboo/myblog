@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}post page{% endblock %}
+
+{% block page_content %}
+
+标题：{{ post.title }}    <a href="{{ post.url }}/edit">修改</a></br>
+    作者：{{ post.author }}</br>
+    标签：{{ post.tags }}</br>
+    修改时间：{{ post.timestamp }}</br>
+    正文：{{ post.content }}</br>
+
+
+{% endblock %}
+

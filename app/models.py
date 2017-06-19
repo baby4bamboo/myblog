@@ -20,12 +20,14 @@ class User(UserMixin,db.DynamicDocument):
         return check_password_hash(self.password_hash, password)
 
 class Post(db.Document):
+    post_id = db.StringField()
     title = db.StringField(max_length=120, required=True)
-    author_id = db.ReferenceField(User)
     author = db.StringField()
+    author_id = db.ReferenceField(User)
     tags = db.ListField(db.StringField(max_length=30))
     content = db.StringField()
     timestamp = db.DateTimeField(default=datetime.datetime.now)
+    url = db.StringField()
     #comments = db.ListField(db.EmbeddedDocumentField(Comment))
 
     meta = {'allow_inheritance': True}

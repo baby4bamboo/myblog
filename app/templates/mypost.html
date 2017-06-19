@@ -8,7 +8,7 @@
     </div>
 
 {% for post in posts %}
-    标题：{{ post.title }}</br>
+    <a href="{{ post.url }}">标题：{{ post.title }}</a></br>
     作者：{{ post.author }}</br>
     标签：{{ post.tags }}</br>
     修改时间：{{ post.timestamp }}</br>
@@ -20,3 +20,4 @@
   对不起，你还没写过文章！
 {% endfor %}
 {% endblock %}
+
