@@ -10,8 +10,15 @@ from flask.ext.login import login_required
 @login_required
 def index():
     user = User.objects(email=session["email"]).first()
-    posts = Post.objects(author=user.id)
+    posts = Post.objects()
     return render_template('index.html', user=user,posts=posts)
+
+@main.route("/mypost", methods=["GET", "POST"])
+@login_required
+def mypost():
+    user = User.objects(email=session["email"]).first()
+    posts = Post.objects(author_id=user.id)
+    return render_template('mypost.html', user=user,posts=posts)
 
 @main.route("/initdb")
 def initdb():
@@ -49,7 +56,7 @@ def signup():
     if form.validate_on_submit():
         user = User.objects(email=form.email.data).first()
         if user is None:
-            User(email=form.email.data, password=form.password.data, password_hash=User.generate_password_hash(form.password.data), username=form.username.data,group=form.group.data).save()
+            User(email=form.email.data, password=form.password.data, password_hash=User.generate_password_hash(form.password.data), username=form.username.data).save()
             return redirect(url_for("main.login"))
         flash(u"该用户已经注册过了，请直接登陆", 'danger')
     return render_template('signup.html',form=form)
@@ -62,7 +69,7 @@ def post():
     if form.validate_on_submit():
         title = Post.objects(title=form.title.data).first()
         if title is None:
-            Post(title=form.title.data, content=form.content.data, tags=[form.tags.data], author=user.id).save()
+            Post(title=form.title.data, content=form.content.data, tags=[form.tags.data], author_id=user.id,author=user.username).save()
             return redirect(url_for("main.index"))
     return render_template('post.html', form=form)
 

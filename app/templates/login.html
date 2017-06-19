@@ -1,6 +1,31 @@
-{% extends "base.html" %}
+{% extends "bootstrap/base.html" %}
+
 {% import "bootstrap/wtf.html" as wtf %}
-{% block page_content %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('main.login') }}">简书</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('main.login') }}">登录</a></li>
+                <li><a href="{{ url_for('main.signup') }}">注册知乎</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block content %}
 <div class="col-md-4">
  {{ wtf.quick_form(form) }}
 </div>

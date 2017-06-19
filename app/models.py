@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from flask_mongoengine import MongoEngine
 from flask.ext.login import UserMixin
 from . import login_manager
@@ -11,7 +11,7 @@ class User(UserMixin,db.DynamicDocument):
     password = db.StringField()
     password_hash = db.StringField(max_length=128,default='')
     username = db.StringField(max_length=25, required=True, unique=True)
-    group = db.StringField(default='subscriber', choices=["administrator", "editor", "subscriber"])
+    group = db.StringField(default='normal', choices=["admin", "editor", "normal"])
 
     def generate_password_hash(password):
         return generate_password_hash(password)
@@ -21,9 +21,11 @@ class User(UserMixin,db.DynamicDocument):
 
 class Post(db.Document):
     title = db.StringField(max_length=120, required=True)
-    author = db.ReferenceField(User)
-    content = db.StringField()
+    author_id = db.ReferenceField(User)
+    author = db.StringField()
     tags = db.ListField(db.StringField(max_length=30))
+    content = db.StringField()
+    timestamp = db.DateTimeField(default=datetime.datetime.now)
     #comments = db.ListField(db.EmbeddedDocumentField(Comment))
 
     meta = {'allow_inheritance': True}
