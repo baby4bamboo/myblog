@@ -1,5 +1,8 @@
-{% extends "layout.html" %}
-{% block body %}
+{% extends "base.html" %}
+
+{% block title %}My blog{% endblock %}
+
+{% block page_content %}
     <div>
       <h2>hello {{ user.username }}</h2>
     </div>
@@ -11,11 +14,6 @@
   </br>
   </br>
 {% else %}
-  <em>Sorry ,can find a post</em>
+  大兄弟，你还没写过文章呢！
 {% endfor %}
-
-  <br/>
-<a href= "{{ url_for('main.logout') }}">logout</a>
-<a href= "{{ url_for('main.initdb') }}">logout and init database</a>
-<a href= "{{ url_for('main.post') }}">add post</a>
 {% endblock %}
