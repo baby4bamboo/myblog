@@ -1,7 +1,7 @@
-from ..models import User,Post
+from ..models import User,Post,Comment
 import datetime
 from . import main
-from .forms import SigninForm,SignupForm,PostForm
+from .forms import SigninForm,SignupForm,PostForm,CommentForm
 from flask import render_template, redirect, flash, request, url_for, session
 from flask.ext.login import login_required, current_user, logout_user, login_fresh, login_user
 from flask.ext.login import login_required
@@ -87,7 +87,14 @@ def mypost():
 def postpage(page=None):
     user = User.objects(email=session["email"]).first()
     post = Post.objects(post_id=page).first()
-    return render_template('postpage.html', post=post,user=user)
+    comments = Comment.objects(post_id=page)
+    form = CommentForm()
+    if form.validate_on_submit():
+        check_comments=Comment.objects(content=form.content.data).first()
+        if check_comments is None:
+            Comment(content=form.content.data,author=user.username,author_id=user.id,post_id=post.post_id).save()
+            form.content.data=""
+    return render_template('postpage.html', post=post,user=user,form=form,comments=comments)
 
 @main.route("/postpage/<string:page>/edit", methods=["GET", "POST"])
 @login_required
@@ -105,3 +112,5 @@ def postedit(page=None):
     form.content.data=post.content
     form.tags.data=post.tags[0]
     return render_template('post.html', post=post,user=user,form=form)
+
+

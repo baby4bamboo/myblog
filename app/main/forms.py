@@ -31,3 +31,8 @@ class PostForm(Form):
     content = TextAreaField()
     tags = StringField(u"标签")
     submit = SubmitField(u"保存")
+
+
+class CommentForm(Form):
+    content = TextAreaField(u"添加评论")
+    submit = SubmitField(u"保存")

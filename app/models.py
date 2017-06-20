@@ -28,13 +28,15 @@ class Post(db.Document):
     content = db.StringField()
     timestamp = db.DateTimeField(default=datetime.datetime.now)
     url = db.StringField()
-    #comments = db.ListField(db.EmbeddedDocumentField(Comment))
 
     meta = {'allow_inheritance': True}
 
-class Comment(db.EmbeddedDocument):
+class Comment(db.Document):
+    author = db.StringField()
+    author_id = db.ReferenceField(User)
+    post_id = db.StringField()
+    timestamp = db.DateTimeField(default=datetime.datetime.now)
     content = db.StringField()
-    name = db.StringField(max_length=120)
 
 @login_manager.user_loader
 def user_load(user_id):
