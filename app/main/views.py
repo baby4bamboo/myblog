@@ -1,7 +1,7 @@
-from ..models import User,Post,Comment
+from ..models import User,Post,Comment,Category
 import datetime
 from . import main
-from .forms import SigninForm,SignupForm,PostForm,CommentForm
+from .forms import SigninForm,SignupForm,PostForm,CommentForm,CategoryForm
 from flask import render_template, redirect, flash, request, url_for, session
 from flask.ext.login import login_required, current_user, logout_user, login_fresh, login_user
 from flask.ext.login import login_required
@@ -38,6 +38,7 @@ def login():
     return render_template('login.html',form=form)
 
 
+
 @main.route("/logout")
 @login_required
 def logout():
@@ -64,10 +65,11 @@ def signup():
 def post():
     form = PostForm()
     user = User.objects(email=session["email"]).first()
+    form.category.choices = [(c.name, c.name) for c in Category.objects()]
     if form.validate_on_submit():
         title = Post.objects(title=form.title.data).first()
         if title is None:
-            post=Post(title=form.title.data, content=form.content.data, tags=[form.tags.data], author_id=user.id,author=user.username).save()
+            post=Post(title=form.title.data, content=form.content.data, tags=[form.tags.data], author_id=user.id,author=user.username,category=request.form.get('category')).save()
             post.update(set__post_id=str(post.id))
             post.update(set__url="http://127.0.0.1:5000/postpage/"+str(post.id))
             return redirect(url_for("main.index"))
@@ -88,29 +90,46 @@ def postpage(page=None):
     user = User.objects(email=session["email"]).first()
     post = Post.objects(post_id=page).first()
     comments = Comment.objects(post_id=page)
+    if post.author == user.username:
+        isauther=True
+    else:
+        isauther=False
     form = CommentForm()
     if form.validate_on_submit():
         check_comments=Comment.objects(content=form.content.data).first()
         if check_comments is None:
             Comment(content=form.content.data,author=user.username,author_id=user.id,post_id=post.post_id).save()
             form.content.data=""
-    return render_template('postpage.html', post=post,user=user,form=form,comments=comments)
+    return render_template('postpage.html', post=post,user=user,form=form,comments=comments,isauther=isauther)
 
 @main.route("/postpage/<string:page>/edit", methods=["GET", "POST"])
 @login_required
 def postedit(page=None):
     form = PostForm()
+    form.category.choices = [(c.name, c.name) for c in Category.objects()]
     user = User.objects(email=session["email"]).first()
     post = Post.objects(post_id=page).first()
     if form.validate_on_submit():
         post.update(set__title=form.title.data)
         post.update(set__content=form.content.data)
         post.update(set__tags=[form.tags.data])
+        post.update(set__category=request.form.get('category'))
         post.update(set__timestamp=datetime.datetime.now)
         return redirect(post.url)
     form.title.data=post.title
     form.content.data=post.content
     form.tags.data=post.tags[0]
     return render_template('post.html', post=post,user=user,form=form)
+
+@main.route("/category" , methods=["GET", "POST"])
+@login_required
+def category():
+    form = CategoryForm()
+    if form.validate_on_submit():
+        category = Category.objects(name=form.name.data).first()
+        if category is None:
+            Category(name=form.name.data, description=form.description.data).save()
+            return redirect(url_for("main.index"))
+    return render_template('category.html', form=form)
 
 

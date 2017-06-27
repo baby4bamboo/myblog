@@ -4,13 +4,14 @@
 
 {% block page_content %}
     <div>
-      <h2>Hello {{ user.username }}</h2>
+      <h2>Helo {{ user.username }}</h2>
     </div>
 
 {% for post in posts %}
-    标题：{{ post.title }}</br>
+    <a href="{{ post.url }}">标题：{{ post.title }}</a></br>
     作者：{{ post.author }}</br>
     标签：{{ post.tags }}</br>
+    分类：{{ post.category }}</br>
     修改时间：{{ post.timestamp }}</br>
     正文：{{ post.content }}</br>
   </br>
@@ -18,4 +19,9 @@
 {% else %}
   对不起，你还没写过文章！
 {% endfor %}
+{% endblock %}
+
+{% block foot %}
+{{ super() }}
+{% include 'footer.html' %}
 {% endblock %}

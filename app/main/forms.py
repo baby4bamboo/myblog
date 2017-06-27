@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 from flask.ext.wtf import Form
 from wtforms.fields.html5 import EmailField, URLField
-from wtforms import StringField, SubmitField, PasswordField, TextAreaField, SelectField, HiddenField, BooleanField
+from wtforms import StringField, SubmitField, PasswordField, TextAreaField, SelectField, HiddenField, BooleanField,SelectField
 from wtforms.validators import InputRequired, Required, Length, Email, Regexp, EqualTo
 
 
@@ -26,13 +26,20 @@ class SignupForm(Form):
     submit = SubmitField(u"确认注册")
 
 class PostForm(Form):
-    content_id = HiddenField()
+    post_id = HiddenField()
     title = StringField(u"标题", validators=[InputRequired()])
     content = TextAreaField()
     tags = StringField(u"标签")
+    category = SelectField(u"选择分类")
     submit = SubmitField(u"保存")
-
 
 class CommentForm(Form):
+    comment_id = HiddenField()
     content = TextAreaField(u"添加评论")
     submit = SubmitField(u"保存")
+
+class CategoryForm(Form):
+    category_id = HiddenField()
+    name = StringField(u"分类名称", validators=[InputRequired()])
+    description = TextAreaField(u"分类描述", description=u"此文字用于描述分类, 在有的主题中它会被显示.")
+    submit = SubmitField(u"保存分类")

@@ -19,12 +19,18 @@ class User(UserMixin,db.DynamicDocument):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+class Category(db.Document):
+    name = db.StringField(required=True, unique=True)
+    description = db.StringField()
+
+
 class Post(db.Document):
     post_id = db.StringField()
     title = db.StringField(max_length=120, required=True)
     author = db.StringField()
     author_id = db.ReferenceField(User)
     tags = db.ListField(db.StringField(max_length=30))
+    category = db.StringField()
     content = db.StringField()
     timestamp = db.DateTimeField(default=datetime.datetime.now)
     url = db.StringField()
