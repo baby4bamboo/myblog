@@ -1,5 +1,6 @@
 {% extends "bootstrap/base.html" %}
 
+
 {% block title %}My blog{% endblock %}
 
 {% block head %}
@@ -11,9 +12,14 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+{% block styles %}
+        {{ super() }}
+        <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet"/>
+{% endblock %}
+<div class="container" id="page-body">
     {% block page_content %}{% endblock %}
 </div>
+
 
 {% block footer %}
 {% include 'footer.html' %}
@@ -23,6 +29,7 @@
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
+<script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
 {% endblock %}
 
 

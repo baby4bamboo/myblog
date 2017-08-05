@@ -1,5 +1,7 @@
 <div class="navbar navbar-inverse" role="navigation">
     <div class="container">
+        <div class="avatar">
+        </div>
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -16,7 +18,8 @@
                 <li><a href="{{ url_for('main.mypost') }}">我的文章</a></li>
                 <li><a href="{{ url_for('main.category') }}">添加分类</a></li>
                 <li><a href="{{ url_for('main.index') }}">初始化数据库</a></li>
-            </ul>
+                <li><a href="{{ url_for('main.admin') }}">admin</a></li>
+                </ul>
         </div>
     </div>
 </div>

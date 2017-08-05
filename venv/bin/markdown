@@ -1,0 +1,5 @@
+#!/Users/bayao/code_base/learn/python_web/flask-2017/flasky/venv/bin/python3.5
+import sys
+import cMarkdown
+
+print cMarkdown.markdown(open(sys.argv[1]).read()).strip()

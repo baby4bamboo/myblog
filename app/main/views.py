@@ -133,3 +133,9 @@ def category():
     return render_template('category.html', form=form)
 
 
+@main.route("/admin" , methods=["GET", "POST"])
+@login_required
+def admin():
+    return render_template('admin.html')
+
+
